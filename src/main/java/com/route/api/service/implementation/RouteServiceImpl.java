@@ -1,6 +1,9 @@
 package com.route.api.service.implementation;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.route.api.service.api.RouteServiceApi;
+import com.route.api.util.JsonFormatterUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,9 +70,10 @@ public class RouteServiceImpl implements RouteServiceApi {
         );
 
         if (responseEntity.getStatusCode() == HttpStatus.OK) {
-            return responseEntity.getBody();
+            return JsonFormatterUtil.jsonFormatter(responseEntity.getBody());
         } else {
             throw new RuntimeException("Error: " + responseEntity.getStatusCode());
         }
+
     }
 }
