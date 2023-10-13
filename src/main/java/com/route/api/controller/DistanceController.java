@@ -1,8 +1,10 @@
 package com.route.api.controller;
 
+import com.route.api.controller.aspect.RequestLimitAspect;
 import com.route.api.service.api.RouteServiceApi;
 import com.route.api.util.DistanceKmDto;
 import com.route.api.util.DistanceRouteDto;
+import com.route.api.util.LimitRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +23,7 @@ import java.util.Date;
 public class DistanceController {
 
     private final RouteServiceApi routeService;
-
+    @LimitRequest(value = 10)
     @GetMapping("/inkm")
     public ResponseEntity<DistanceKmDto>calculateDistanceInKm(@RequestParam double lat1, @RequestParam double lon1,
                                                           @RequestParam double lat2, @RequestParam double lon2){
@@ -39,6 +41,7 @@ public class DistanceController {
         return ResponseEntity.ok(distanceKmDto);
     }
 
+    @LimitRequest(value = 10)
     @GetMapping("/inroad")
     public ResponseEntity<DistanceRouteDto>distanceByRoad(@RequestParam double lat1, @RequestParam double lon1,
                                                           @RequestParam double lat2, @RequestParam double lon2){
