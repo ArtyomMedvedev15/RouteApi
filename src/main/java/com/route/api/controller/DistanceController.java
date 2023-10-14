@@ -1,11 +1,12 @@
 package com.route.api.controller;
 
-import com.route.api.controller.aspect.RequestLimitAspect;
+import com.route.api.exception.InvalidParameterException;
 import com.route.api.service.api.RouteServiceApi;
-import com.route.api.util.DistanceKmDto;
-import com.route.api.util.DistanceRouteDto;
+import com.route.api.dto.DistanceKmDto;
+import com.route.api.dto.DistanceRouteDto;
 import com.route.api.util.LimitRequest;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,17 +24,20 @@ import java.util.Date;
 public class DistanceController {
 
     private final RouteServiceApi routeService;
+
     @LimitRequest(value = 10)
     @GetMapping("/inkm")
-    public ResponseEntity<DistanceKmDto>calculateDistanceInKm(@RequestParam double lat1, @RequestParam double lon1,
-                                                          @RequestParam double lat2, @RequestParam double lon2){
-        double distanceInKm = routeService.distanceInKm(lat1, lon1, lat2, lon2);
+    public ResponseEntity<DistanceKmDto>calculateDistanceInKm(@RequestParam double startLatitude, @RequestParam double startLongitude,
+                                                              @RequestParam double endLatitude, @RequestParam double endLongitude) throws InvalidParameterException {
+
+        double distanceInKm = routeService.distanceInKm(startLatitude, startLongitude, endLatitude, endLongitude);
+
 
         DistanceKmDto distanceKmDto = DistanceKmDto.builder()
-                .startLatitude(lat1)
-                .startLongitude(lon1)
-                .endLatitude(lat2)
-                .endLongitude(lon2)
+                .startLatitude(startLatitude)
+                .startLongitude(startLongitude)
+                .endLatitude(endLatitude)
+                .endLongitude(endLongitude)
                 .distanceKm(distanceInKm)
                 .dateRequest(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()))
                 .build();
@@ -43,15 +47,15 @@ public class DistanceController {
 
     @LimitRequest(value = 10)
     @GetMapping("/inroad")
-    public ResponseEntity<DistanceRouteDto>distanceByRoad(@RequestParam double lat1, @RequestParam double lon1,
-                                                          @RequestParam double lat2, @RequestParam double lon2){
-        String distanceInRoad = routeService.routeOnRoadByJson(lat1, lon1, lat2, lon2);
+    public ResponseEntity<DistanceRouteDto>distanceByRoad(@RequestParam double startLatitude, @RequestParam double startLongitude,
+                                                          @RequestParam double endLatitude, @RequestParam double endLongitude) throws InvalidParameterException {
+        String distanceInRoad = routeService.routeOnRoadByJson(startLatitude, startLongitude, endLatitude, endLongitude);
 
         DistanceRouteDto distanceKmDto = DistanceRouteDto.builder()
-                .startLatitude(lat1)
-                .startLongitude(lon1)
-                .endLatitude(lat2)
-                .endLongitude(lon2)
+                .startLatitude(startLatitude)
+                .startLongitude(startLongitude)
+                .endLatitude(endLatitude)
+                .endLongitude(endLongitude)
                 .route(distanceInRoad)
                 .dateRequest(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()))
                 .build();

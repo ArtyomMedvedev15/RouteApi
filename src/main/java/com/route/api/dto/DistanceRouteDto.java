@@ -1,4 +1,4 @@
-package com.route.api.util;
+package com.route.api.dto;
 
 import lombok.Builder;
 import lombok.Data;
