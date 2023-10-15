@@ -68,3 +68,5 @@ Response example:
 }
 ```
 The distanceKm is expressed in kilometers.
+
+To use [Postman](https://github.com/Tim01Bro/RouteApi/tree/master/postman), there is a directory called "Postman" where the collection for import is located
