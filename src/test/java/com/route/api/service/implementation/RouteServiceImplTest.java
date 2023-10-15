@@ -61,7 +61,7 @@ class RouteServiceImplTest {
     }
 
     @Test
-    void GetDistanceInRoadTest_WithInValidCoordinatesStatLatitude_ThrowException() {
+    void GetDistanceInRoadTest_WithInValidCoordinatesStartLatitude_ThrowException() {
         InvalidParameterException invalidParameterException = assertThrows(InvalidParameterException.class,
                 () -> routeService.routeOnRoadByJson(1252.231838, 21.005995, 52.247976, 21.015256)
         );
@@ -69,7 +69,7 @@ class RouteServiceImplTest {
     }
 
     @Test
-    void GetDistanceInRoadTest_WithInValidCoordinatesStatLongitude_ThrowException() {
+    void GetDistanceInRoadTest_WithInValidCoordinatesStartLongitude_ThrowException() {
         InvalidParameterException invalidParameterException = assertThrows(InvalidParameterException.class,
                 () -> routeService.routeOnRoadByJson(52.231838, 1221.005995, 52.247976, 21.015256)
         );
