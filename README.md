@@ -1,7 +1,9 @@
 # RouteApi
-### API for calculating the distance between two points on the earth's surface
+### API for calculating the distance between two points on the earth's surface. 
 
-API for calculating the distance between two points on the earth's surface, as well as for getting a route on public roads using an additional API Приложение будет доступно по адресу [Openrouteservice](https://openrouteservice.org/dev/#/api-docs/v2/directions) in JSON format.
+API for calculating the distance between two points on the earth's surface, as well as for getting a route on public roads using an additional. The API application will be available at [Openrouteservice](https://openrouteservice.org/dev/#/api-docs/v2/directions) in JSON format.
+The [Haversine Formula](https://en.wikipedia.org/wiki/Haversine_formula#:~:text=The%20haversine%20formula%20determines%20the,and%20angles%20of%20spherical%20triangles.) was used to calculate the distance. 
+
 ## Installation and launch
 1. Make sure you have Java and Maven installed.
 
