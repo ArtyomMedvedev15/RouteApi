@@ -41,7 +41,7 @@ public class DistanceController {
                 .distanceKm(distanceInKm)
                 .dateRequest(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()))
                 .build();
-
+        log.info("Get distance with {} with status 200 in {}",distanceKmDto,new Date());
         return ResponseEntity.ok(distanceKmDto);
     }
 
@@ -51,7 +51,7 @@ public class DistanceController {
                                                           @RequestParam double endLatitude, @RequestParam double endLongitude) throws InvalidParameterException {
         String distanceInRoad = routeService.routeOnRoadByJson(startLatitude, startLongitude, endLatitude, endLongitude);
 
-        DistanceRouteDto distanceKmDto = DistanceRouteDto.builder()
+        DistanceRouteDto distanceRouteDto = DistanceRouteDto.builder()
                 .startLatitude(startLatitude)
                 .startLongitude(startLongitude)
                 .endLatitude(endLatitude)
@@ -60,7 +60,8 @@ public class DistanceController {
                 .dateRequest(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()))
                 .build();
 
-        return ResponseEntity.ok(distanceKmDto);
+        log.info("Get distance with {} with status 200 in {}",distanceRouteDto,new Date());
+        return ResponseEntity.ok(distanceRouteDto);
     }
 
 
