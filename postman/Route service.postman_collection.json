@@ -1,0 +1,95 @@
+{
+	"info": {
+		"_postman_id": "9ce7b038-585d-435a-a45a-d853b6cd3a90",
+		"name": "Route service",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "10958180"
+	},
+	"item": [
+		{
+			"name": "Calculate distance in km",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": []
+				},
+				"url": {
+					"raw": "localhost:8080/api/v1/distance/inkm?startLatitude=52.231838&startLongitude=21.005995&endLatitude=52.247976&endLongitude=21.015256",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"distance",
+						"inkm"
+					],
+					"query": [
+						{
+							"key": "startLatitude",
+							"value": "52.231838"
+						},
+						{
+							"key": "startLongitude",
+							"value": "21.005995"
+						},
+						{
+							"key": "endLatitude",
+							"value": "52.247976"
+						},
+						{
+							"key": "endLongitude",
+							"value": "21.015256"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get distance in road",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/api/v1/distance/inroad?startLatitude=52.231838&startLongitude=21.005995&endLatitude=52.247976&endLongitude=21.015256",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"distance",
+						"inroad"
+					],
+					"query": [
+						{
+							"key": "startLatitude",
+							"value": "52.231838"
+						},
+						{
+							"key": "startLongitude",
+							"value": "21.005995"
+						},
+						{
+							"key": "endLatitude",
+							"value": "52.247976"
+						},
+						{
+							"key": "endLongitude",
+							"value": "21.015256"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
