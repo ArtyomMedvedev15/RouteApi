@@ -14,8 +14,11 @@ import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+
+import static com.route.api.util.CoordinatesUtil.ValidationCoordinates;
 
 @Service
 @Slf4j
@@ -33,41 +36,32 @@ public class RouteServiceImpl implements RouteServiceApi {
 
     @Override
     public double distanceInKm(double startLatitude, double startLongitude, double endLatitude, double endLongitude) throws InvalidParameterException {
+        ValidationCoordinates(startLatitude, startLongitude, endLatitude, endLongitude);
+        double radStartLatitude = Math.toRadians(startLatitude);
+        double radStartLongitude = Math.toRadians(startLongitude);
+        double radEndLatitude = Math.toRadians(endLatitude);
+        double radEndLongitude = Math.toRadians(endLongitude);
 
-        if (!CoordinatesUtil.isValidLatitude(startLatitude) || !CoordinatesUtil.isValidLongitude(startLongitude) ||
-                !CoordinatesUtil.isValidLatitude(endLatitude) || !CoordinatesUtil.isValidLongitude(endLongitude)) {
-            throw new InvalidParameterException("Invalid coordinates. Please provide valid latitude and longitude values.");
-        }
+        double deltatLatitude = radEndLatitude - radStartLatitude;
+        double deltaLongitude = radEndLongitude - radStartLongitude;
 
-        double radLat1 = Math.toRadians(startLatitude);
-        double radLon1 = Math.toRadians(startLongitude);
-        double radLat2 = Math.toRadians(endLatitude);
-        double radLon2 = Math.toRadians(endLongitude);
+        double haversineA = Math.sin(deltatLatitude / 2) * Math.sin(deltatLatitude / 2) +
+                Math.cos(radStartLatitude) * Math.cos(radEndLatitude) *
+                        Math.sin(deltaLongitude / 2) * Math.sin(deltaLongitude / 2);
 
-        double deltaLat = radLat2 - radLat1;
-        double deltaLon = radLon2 - radLon1;
-
-        double a = Math.sin(deltaLat / 2) * Math.sin(deltaLat / 2) +
-                Math.cos(radLat1) * Math.cos(radLat2) *
-                        Math.sin(deltaLon / 2) * Math.sin(deltaLon / 2);
-
-        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-
-        return EARTH_RADIUS_KM * c;
+        double distanceC = 2 * Math.atan2(Math.sqrt(haversineA), Math.sqrt(1 - haversineA));
+        log.info("Get distance in km from start position [{},{}] to end position [{},{}] in {}",startLatitude,startLongitude,endLatitude,endLongitude,new Date());
+        return EARTH_RADIUS_KM * distanceC;
     }
 
     @Override
     public String routeOnRoadByJson(double startLatitude, double startLongitude, double endLatitude, double endLongitude) throws InvalidParameterException {
-        if (!CoordinatesUtil.isValidLatitude(startLatitude) || !CoordinatesUtil.isValidLongitude(startLongitude) ||
-                !CoordinatesUtil.isValidLatitude(endLatitude) || !CoordinatesUtil.isValidLongitude(endLongitude)) {
-            throw new InvalidParameterException("Invalid coordinates. Please provide valid latitude and longitude values.");
-        }
+        ValidationCoordinates(startLatitude, startLongitude, endLatitude, endLongitude);
         String apiUrl = "https://api.openrouteservice.org/v2/directions/driving-car/json";
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.set("Authorization", "Bearer " + apiKey);
-
         Map<String, Object> requestBody = new HashMap<>();
         requestBody.put("coordinates", new double[][]{{startLongitude, startLatitude}, {endLongitude, endLatitude}});
         requestBody.put("format", "json");
@@ -82,10 +76,15 @@ public class RouteServiceImpl implements RouteServiceApi {
         );
 
         if (responseEntity.getStatusCode() == HttpStatus.OK) {
+            log.info("Get distance in km from start position [{},{}] to end position [{},{}] in {}",startLatitude,startLongitude,endLatitude,endLongitude,new Date());
             return JsonFormatterUtil.jsonFormatter(responseEntity.getBody());
         } else {
-            throw new RuntimeException("Error: " + responseEntity.getStatusCode());
+            RuntimeException runtimeException = new RuntimeException("Error: " + responseEntity.getStatusCode());
+            log.error("Error with message: {} in {}",runtimeException.getMessage(),new Date());
+            throw runtimeException;
         }
 
     }
+
+
 }
